@@ -1,5 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
+using Telegram.Bot.Types;
+using TeleLlama.TelegramLogic;
 
 namespace TeleLlama.OllamaLogic;
 
@@ -21,11 +23,19 @@ public class OllamaApiClient
         Instance = this;
     }
 
-    public async Task RunModel(string modelName)
+    public async Task RunModel(string modelName, Chat? notificationReceiver)
     {
-        if(await GetRunningModel() == modelName) return;
+        if (await GetRunningModel() == modelName)
+        {
+            if (notificationReceiver != null)
+            {
+                TeleLlamaBot.Instance?.Send(notificationReceiver, "Model is already running");
+            }
+            
+            return;
+        }
         
-        var requestData = new
+        var payload = new
         {
             model = modelName,
             prompt = "This is a test prompt, please do not respond",
@@ -33,11 +43,16 @@ public class OllamaApiClient
             stream = false 
         };
 
-        string jsonContent = JsonSerializer.Serialize(requestData);
+        string jsonContent = JsonSerializer.Serialize(payload);
         StringContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         HttpResponseMessage response = await _httpClient.PostAsync("/api/generate", content);
         response.EnsureSuccessStatusCode();
+        
+        if (notificationReceiver != null)
+        {
+            TeleLlamaBot.Instance?.Send(notificationReceiver, "Model loaded");
+        }
     }
 
     public async Task<string> GetRunningModel()
@@ -45,8 +60,8 @@ public class OllamaApiClient
         HttpResponseMessage response = await _httpClient.GetAsync("/api/ps");
         response.EnsureSuccessStatusCode();
         string responseString = await response.Content.ReadAsStringAsync();
-        OllamaRunningModelsResponse? responseObject =
-            JsonSerializer.Deserialize<OllamaRunningModelsResponse>(responseString, _options);
+        OllamaModels? responseObject =
+            JsonSerializer.Deserialize<OllamaModels>(responseString, _options);
         
         if (responseObject == null || responseObject.Models.Count < 1)
         {
@@ -61,8 +76,8 @@ public class OllamaApiClient
         HttpResponseMessage response = await _httpClient.GetAsync("/api/tags");
         response.EnsureSuccessStatusCode();
         string responseString = await response.Content.ReadAsStringAsync();
-        OllamaRunningModelsResponse? responseObject =
-            JsonSerializer.Deserialize<OllamaRunningModelsResponse>(responseString, _options);
+        OllamaModels? responseObject =
+            JsonSerializer.Deserialize<OllamaModels>(responseString, _options);
         
         List<string> list = new();
         

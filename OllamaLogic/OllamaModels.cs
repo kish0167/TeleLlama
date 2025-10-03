@@ -2,7 +2,7 @@
 
 namespace TeleLlama.OllamaLogic;
 
-public class OllamaRunningModelsResponse
+public class OllamaModels
 {
     [JsonPropertyName("models")]
     public List<Model> Models { get; set; } = new List<Model>();
