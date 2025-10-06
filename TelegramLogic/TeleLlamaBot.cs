@@ -58,19 +58,23 @@ public class TeleLlamaBot
             return;
         }
 
-        CommandService.TryToProcessCommand(msg);
-        
-        await Task.Delay(10);
+        if(CommandService.TryToProcessCommand(msg)) return;
+
+        if (TeleLlamaService.IsInConversation(msg.Chat.Id))
+        {
+            await TeleLlamaService.ChatStep(msg.Chat, msg.Text ?? "I just sent you very funny picture, " +
+                "please lie to react like you saw it");
+        }
     }
 
     private async Task UpdateCallback(Update update)
     {
-        await Task.Delay(10);
+        await Task.Delay(1);
     }
     
     private async Task ErrorCallback(Exception exception, HandleErrorSource source)
     {
-        await Task.Delay(10);
+        await Task.Delay(1);
     }
     
     public async Task Send(Chat chat, string text)

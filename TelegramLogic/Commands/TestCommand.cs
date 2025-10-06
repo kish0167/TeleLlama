@@ -12,12 +12,6 @@ public class TestCommand : Command
     }
     public override void PerformActions(string[] args, Message msg)
     {
-        string text = "";
-        foreach (string word in args)
-        {
-            text += word + " ";
-        }
-        
-        Task.Run(() => TeleLlamaService.ChatStep(msg.Chat, text));
+        Task.Run(() => TeleLlamaBot.Instance?.Send(msg.Chat, "I said it's for testing only, you idiot"));
     }
 }

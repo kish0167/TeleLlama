@@ -30,9 +30,15 @@ public static class CommandService
         return String.CompareOrdinal(x.Syntax, y.Syntax);
     }
     
-    public static void TryToProcessCommand(Message msg)
+    public static bool TryToProcessCommand(Message msg)
     {
-        string currentCommand = msg.Text ?? msg.Caption ?? "/";
+        string currentCommand = msg.Text ?? msg.Caption ?? " ";
+
+        if (!currentCommand.StartsWith("/"))
+        {
+            return false;
+        }
+        
         string[] split = currentCommand.Split(' ');
         string opcode = split[0];
 
@@ -48,12 +54,13 @@ public static class CommandService
             }
             catch (Exception e)
             {
-                return;
+                return false;
             }
                 
-            return;
+            return true;
         }
         
         new HelpCommand().PerformActions(args, msg);
+        return true;
     }
 }

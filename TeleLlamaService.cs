@@ -25,6 +25,7 @@ public static class TeleLlamaService
         }
         
         OllamaChatItem chatItem = _idChatItem[chat.Id];
+        
         chatItem.AddNewMessage(message, "user");
 
         Stream stream = await _client.GetResponseStream(chatItem);
@@ -55,14 +56,14 @@ public static class TeleLlamaService
                     if (isFirst)
                     {
                         await _bot.Send(chat, chunk ?? "");
-                        completeResponse += chunk;
                         isFirst = false;
                     }
                     else
                     {
                         await _bot.AddToLastMessage(chat, chunk ?? "");
-                        completeResponse += chunk;
                     }
+                    
+                    completeResponse += chunk;
                 }
             }
             catch (JsonException e)
@@ -72,5 +73,25 @@ public static class TeleLlamaService
         }
         
         chatItem.AddNewMessage(completeResponse, "assistant");
+    }
+
+    public static void SetNewSystemPrompt(long id, string prompt)
+    {
+        _idChatItem[id].SystemPrompt = prompt;
+    }
+
+    public static void ClearChat(long id)
+    {
+        _idChatItem.Remove(id);
+    }
+
+    public static bool IsInConversation(long id)
+    {
+        return _idChatItem.ContainsKey(id);
+    }
+
+    public static void StartConversation(long id)
+    {
+        _idChatItem.Add(id, new OllamaChatItem());
     }
 }

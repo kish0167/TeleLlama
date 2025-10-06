@@ -34,6 +34,23 @@ public class OllamaApiClient
             
             return;
         }
+
+        bool isPresent = false;
+        
+        foreach (string modelFromList in await GetModelList())
+        {
+            isPresent = isPresent || modelName == modelFromList;
+        }
+
+        if (!isPresent)
+        {
+            if (notificationReceiver != null)
+            {
+                TeleLlamaBot.Instance?.Send(notificationReceiver, "No such model");
+            }
+            
+            return;
+        }
         
         var payload = new
         {
