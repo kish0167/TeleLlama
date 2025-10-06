@@ -81,7 +81,6 @@ public class TeleLlamaBot
         }
         
         Message msg = await _bot.SendMessage(chat, text);
-        // , ParseMode.Html, replyMarkup: new ReplyKeyboardRemove()
         UpdateLastMessageBuffer(chat, msg);
     }
 

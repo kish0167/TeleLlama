@@ -92,5 +92,20 @@ public class OllamaApiClient
         }
 
         return list;
-    } 
+    }
+
+    public async Task<Stream> GetResponseStream(OllamaChatItem chatItem)
+    {
+        var requestData = new
+        {
+            model = await GetRunningModel(),
+            messages = chatItem.MessageList,
+            stream = true
+        };
+
+        string jsonPayload = JsonSerializer.Serialize(requestData);
+        StringContent content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PostAsync("/api/chat", content);
+        return await response.Content.ReadAsStreamAsync();
+    }
 }

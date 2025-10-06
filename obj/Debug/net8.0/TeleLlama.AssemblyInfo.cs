@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TeleLlama")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+627d1b0c1cc032e312bdb5711f44b26cc6964bff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+00afd812586c813cd89e0af87a898dd2e3898efb")]
 [assembly: System.Reflection.AssemblyProductAttribute("TeleLlama")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TeleLlama")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

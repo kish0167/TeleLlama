@@ -14,7 +14,7 @@ public class RunModelCommand : Command
     {
         if (args.Length < 1)
         {
-            TeleLlamaBot.Instance?.Send(msg.Chat, "/runModel 'model'");
+            TeleLlamaBot.Instance?.Send(msg.Chat, "/run 'model'");
             return;
         }
         
