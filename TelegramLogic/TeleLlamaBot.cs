@@ -1,5 +1,8 @@
-﻿namespace TeleLlama.TelegramLogic;
-using Commands;
+﻿using System.Diagnostics;
+using TeleLlama.Commands;
+
+namespace TeleLlama.TelegramLogic;
+
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -69,12 +72,12 @@ public class TeleLlamaBot
 
     private async Task UpdateCallback(Update update)
     {
-        await Task.Delay(1);
+        await Task.Delay(10);
     }
     
     private async Task ErrorCallback(Exception exception, HandleErrorSource source)
     {
-        await Task.Delay(1);
+        await Task.Delay(10);
     }
     
     public async Task Send(Chat chat, string text)
@@ -94,6 +97,9 @@ public class TeleLlamaBot
         await EditMessage(chat, _lastMessages[chat.Id].MessageId, newMessage);
         _lastMessages[chat.Id] = (_lastMessages[chat.Id].MessageId, newMessage);
     }
+
+    private static readonly Stopwatch Timer = new();
+    private const int MinDelay = 500;
     
     private async Task EditMessage(Chat chat, int messageId, string newText)
     {
@@ -102,7 +108,13 @@ public class TeleLlamaBot
             return;
         }
 
+        if (Timer.Elapsed.TotalMilliseconds < MinDelay)
+        {
+            return;
+        }
+
         await _bot.EditMessageText(new ChatId(chat.Id), messageId, newText);
+        Timer.Restart();
     }
     
     private void UpdateLastMessageBuffer(Chat chat, Message msg)

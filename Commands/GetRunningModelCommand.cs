@@ -1,7 +1,8 @@
 ﻿using Telegram.Bot.Types;
 using TeleLlama.OllamaLogic;
+using TeleLlama.TelegramLogic;
 
-namespace TeleLlama.TelegramLogic.Commands;
+namespace TeleLlama.Commands;
 
 public class GetRunningModelCommand : Command
 {

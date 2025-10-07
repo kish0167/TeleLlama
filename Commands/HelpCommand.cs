@@ -1,6 +1,7 @@
 ﻿using Telegram.Bot.Types;
+using TeleLlama.TelegramLogic;
 
-namespace TeleLlama.TelegramLogic.Commands;
+namespace TeleLlama.Commands;
 
 public class HelpCommand : Command
 {

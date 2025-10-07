@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Telegram.Bot.Types;
 
-namespace TeleLlama.TelegramLogic.Commands;
+namespace TeleLlama.Commands;
 
 public static class CommandService
 {

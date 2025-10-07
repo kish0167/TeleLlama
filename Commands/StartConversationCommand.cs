@@ -1,6 +1,6 @@
 ﻿using Telegram.Bot.Types;
 
-namespace TeleLlama.TelegramLogic.Commands;
+namespace TeleLlama.Commands;
 
 public class StartConversationCommand : Command
 {
