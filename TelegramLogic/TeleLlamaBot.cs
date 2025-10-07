@@ -98,8 +98,7 @@ public class TeleLlamaBot
         _lastMessages[chat.Id] = (_lastMessages[chat.Id].MessageId, newMessage);
     }
 
-    private static readonly Stopwatch Timer = new();
-    private const int MinDelay = 500;
+    
     
     private async Task EditMessage(Chat chat, int messageId, string newText)
     {
@@ -107,14 +106,9 @@ public class TeleLlamaBot
         {
             return;
         }
-
-        if (Timer.Elapsed.TotalMilliseconds < MinDelay)
-        {
-            return;
-        }
+        
 
         await _bot.EditMessageText(new ChatId(chat.Id), messageId, newText);
-        Timer.Restart();
     }
     
     private void UpdateLastMessageBuffer(Chat chat, Message msg)

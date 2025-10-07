@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using Telegram.Bot.Types;
 using TeleLlama.OllamaLogic;
 using TeleLlama.TelegramLogic;
@@ -7,9 +8,9 @@ namespace TeleLlama;
 
 public static class TeleLlamaService
 {
+    private static int _minDelay = 100;
     private static TeleLlamaBot _bot = new();
     private static OllamaApiClient _client = new();
-
     private static Dictionary<long, OllamaChatItem> _idChatItem = new();
     public static void Initialize()
     {
@@ -62,14 +63,11 @@ public static class TeleLlamaService
                     {
                         await _bot.AddToLastMessage(chat, chunk ?? "");
                     }
-                    
+
                     completeResponse += chunk;
                 }
             }
-            catch (JsonException e)
-            {
-                 continue;       
-            }
+            catch (JsonException e) { }
         }
         
         chatItem.AddNewMessage(completeResponse, "assistant");
